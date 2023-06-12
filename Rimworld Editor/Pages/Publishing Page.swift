@@ -14,17 +14,14 @@ struct PublishingPage: View {
 	@Query private var manifests: [RimworldManifest]
 
 	var body: some View {
-		Form {
-			if let manifest = manifests.first {
-				PublishingEditor(manifest)
-			} else {
-				Text("Initializing manifest...")
-					.onAppear {
-						context.insert(RimworldManifest("Author.Mod", named: "My Mod"))
-					}
-			}
+		if let manifest = manifests.first {
+			PublishingEditor(manifest)
+		} else {
+			Text("Initializing manifest...")
+				.onAppear {
+					context.insert(RimworldManifest("Author.Mod", named: "My Mod"))
+				}
 		}
-		.formStyle(.grouped)
 	}
 
 }
