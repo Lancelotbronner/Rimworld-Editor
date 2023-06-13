@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct DefinitionPage<Def: Definition>: View {
+struct DefinitionPage<Def: EditableModel>: View {
 
 	@Environment(Navigation<AppRoutes>.self) private var navigation
 	@Environment(\.modelContext) private var context
@@ -32,7 +32,7 @@ struct DefinitionPage<Def: Definition>: View {
 		.toolbar {
 			ToolbarItem {
 				Button {
-					let placeholder = Def("MyNamespace:\(Def.self)-\(definitions.count)", title: "New \(Def.self)")
+					let placeholder = Def("Placeholder \(definitions.count)")
 					context.insert(placeholder)
 					navigation.path.append(placeholder)
 				} label: {

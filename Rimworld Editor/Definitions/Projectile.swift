@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-@Model public final class Projectile: Definition {
+@Model public final class Projectile: EditableModel {
 
 	/// The name of the bullet
 	public var identifier: String
@@ -36,8 +36,8 @@ import SwiftData
 	public var speed = 0
 	// projectile/speed
 
-	public init(_ identifier: String, title: String) {
-		self.identifier = identifier
+	public init(_ title: String) {
+		self.identifier = "projectile:\(title)"
 		self.title = title
 	}
 

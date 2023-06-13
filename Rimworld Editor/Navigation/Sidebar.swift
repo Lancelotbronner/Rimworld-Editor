@@ -20,6 +20,10 @@ struct Sidebar: View {
 				AppRoutes.manifest.link
 				AppRoutes.publishing.link
 			}
+			Section("Assets") {
+				AppRoutes.textures.link
+				AppRoutes.sounds.link
+			}
 			Section("Definitions") {
 				AppRoutes.projectile.link
 				AppRoutes.researchProjects.link

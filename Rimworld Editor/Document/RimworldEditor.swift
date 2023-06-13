@@ -16,6 +16,8 @@ extension RimworldEditor {
 		ManifestPackageDependency.self,
 		ManifestPackageRelation.self,
 
+		Texture.self,
+
 		Projectile.self,
 		ResearchProject.self,
 	]

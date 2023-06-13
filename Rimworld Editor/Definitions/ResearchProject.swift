@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-@Model public final class ResearchProject: Definition {
+@Model public final class ResearchProject: EditableModel {
 
 	/// The name of the research project
 	public var identifier = ""
@@ -19,8 +19,16 @@ import SwiftData
 	/// The description of the research project
 	public var summary = ""
 
-	//	public var graphics: Graphics
-	// graphicData
+	private var rawGraphics = 0
+
+	/// The icon's graphic mode
+	public var graphics: GraphicMode {
+		get { GraphicMode(rawValue: rawGraphics) ?? .none }
+		set { rawGraphics = newValue.rawValue }
+	}
+
+	/// The textures associated with the project
+	public var textures: [Texture] = []
 
 	/// How much work must go into this project in order to complete it
 	public var cost = 0
@@ -33,14 +41,12 @@ import SwiftData
 
 	/// The X position of the project in the research view
 	public var x = 0.0
-	// researchViewY
 
 	/// The X position of the project in the research view
 	public var y = 0.0
-	// researchViewY
 
-	public init(_ identifier: String, title: String) {
-		self.identifier = identifier
+	public init(_ title: String) {
+		self.identifier = "research_project:\(title)"
 		self.title = title
 	}
 
@@ -81,9 +87,12 @@ public struct ResearchProjectEditor: View {
 
 	public var body: some View {
 		Form {
-			TextField("Identifier", text: $definition.identifier)
-			TextField("Title", text: $definition.title)
-			TextField("Summary", text: $definition.summary)
+			Section("Definition") {
+				TextField("Identifier", text: $definition.identifier)
+				TextField("Title", text: $definition.title)
+				TextField("Summary", text: $definition.summary)
+			}
+
 			Section("Research") {
 				TextField("Technology Level", text: $definition.level)
 				TextField("Work", value: $definition.cost, format: .number)
@@ -110,6 +119,10 @@ public struct ResearchProjectEditor: View {
 					}
 				}
 			}
+
+			Section("Graphics") {
+				GraphicsView(selection: $definition.graphics, using: $definition.textures)
+			}
 		}
 		.formStyle(.grouped)
 	}
@@ -117,5 +130,5 @@ public struct ResearchProjectEditor: View {
 }
 
 #Preview {
-	ResearchProjectEditor(ResearchProject("preview:test", title: "Preview Technologies"))
+	ResearchProjectEditor(ResearchProject("Preview Technologies"))
 }

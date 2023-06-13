@@ -12,6 +12,9 @@ public enum AppRoutes: Routes, CaseIterable {
 	case manifest
 	case publishing
 
+	case textures
+	case sounds
+
 	case projectile
 	case researchProjects
 
@@ -25,6 +28,8 @@ extension AppRoutes {
 		switch self {
 		case .manifest: Label("Manifest", systemImage: "doc.text")
 		case .publishing: Label("Publishing", systemImage: "network")
+		case .textures: Label("Textures", systemImage: "photo")
+		case .sounds: Label("Sounds", systemImage: "speaker.wave.3")
 		case .projectile: Projectile.label
 		case .researchProjects: ResearchProject.label
 		}
@@ -47,6 +52,8 @@ extension AppRoutes {
 		switch self {
 		case .manifest: ManifestPage()
 		case .publishing: PublishingPage()
+		case .textures: DefinitionPage<Texture>()
+		case .sounds: Text("Sounds")
 		case .projectile: DefinitionPage<Projectile>()
 		case .researchProjects: DefinitionPage<ResearchProject>()
 		}

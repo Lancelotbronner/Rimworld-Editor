@@ -8,17 +8,17 @@
 import SwiftUI
 import SwiftData
 
-public protocol Definition: PersistentModel {
+public protocol EditableModel: PersistentModel {
 
-	associatedtype DefinitionLabelView: View
+	associatedtype IdentityView: View
 	associatedtype LabelView: View
 	associatedtype EditorView: View
 
-	init(_ identifier: String, title: String)
+	init(_ title: String)
 
 	var label: LabelView { get }
 	var editor: EditorView { get }
 
-	static var label: DefinitionLabelView { get }
+	static var label: IdentityView { get }
 
 }
