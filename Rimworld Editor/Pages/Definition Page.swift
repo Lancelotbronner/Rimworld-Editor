@@ -8,12 +8,12 @@
 import SwiftUI
 import SwiftData
 
-struct DefinitionPage<Def: EditableModel>: View {
+struct DefinitionPage<Model: EditableModel>: View {
 
 	@Environment(Navigation<AppRoutes>.self) private var navigation
 	@Environment(\.modelContext) private var context
 
-	@Query private var definitions: [Def]
+	@Query private var definitions: [Model]
 
 	var body: some View {
 		NavigationStack {
@@ -24,7 +24,7 @@ struct DefinitionPage<Def: EditableModel>: View {
 					}
 				}
 			}
-			.navigationDestination(for: Def.self) { definition in
+			.navigationDestination(for: Model.self) { definition in
 				definition.editor
 					.formStyle(.grouped)
 			}
@@ -32,7 +32,7 @@ struct DefinitionPage<Def: EditableModel>: View {
 		.toolbar {
 			ToolbarItem {
 				Button {
-					let placeholder = Def("Placeholder \(definitions.count)")
+					let placeholder = Model("Placeholder \(definitions.count)")
 					context.insert(placeholder)
 					navigation.path.append(placeholder)
 				} label: {

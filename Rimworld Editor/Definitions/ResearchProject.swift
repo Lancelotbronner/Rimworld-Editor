@@ -10,6 +10,9 @@ import SwiftData
 
 @Model public final class ResearchProject: EditableModel {
 
+	/// The unique identifier of the research project
+	public var uuid = UUID()
+
 	/// The name of the research project
 	public var identifier = ""
 
@@ -19,11 +22,11 @@ import SwiftData
 	/// The description of the research project
 	public var summary = ""
 
-	private var rawGraphics = 0
+	private var rawGraphics = ""
 
 	/// The icon's graphic mode
-	public var graphics: GraphicMode {
-		get { GraphicMode(rawValue: rawGraphics) ?? .none }
+	public var graphics: GraphicsClass {
+		get { GraphicsClass(rawValue: rawGraphics) }
 		set { rawGraphics = newValue.rawValue }
 	}
 
@@ -50,15 +53,25 @@ import SwiftData
 		self.title = title
 	}
 
+	public var computedIdentifier: String {
+		_read {
+			if identifier.isEmpty {
+				yield uuid.uuidString
+				return
+			}
+			yield identifier
+		}
+	}
+
 	public static var label: some View {
 		Label("Research Project", systemImage: "flask")
 	}
 
-	@Transient public var label: some View {
+	public var label: some View {
 		Label(title, systemImage: "flask")
 	}
 
-	@Transient public var editor: some View {
+	public var editor: some View {
 		ResearchProjectEditor(self)
 	}
 
@@ -71,6 +84,11 @@ import SwiftData
 		root.addChild(XMLElement(name: "techLevel", stringValue: level))
 		root.addChild(XMLElement(name: "researchViewX", stringValue: x.description))
 		root.addChild(XMLElement(name: "researchViewY", stringValue: y.description))
+
+		let _graphics = XMLElement(name: "graphicData")
+		//TODO: texPath???
+		_graphics.addChild(XMLElement(name: "graphicClass", stringValue: graphics.rawValue))
+
 		return root
 	}
 
@@ -88,30 +106,29 @@ public struct ResearchProjectEditor: View {
 	public var body: some View {
 		Form {
 			Section("Definition") {
-				TextField("Identifier", text: $definition.identifier)
-				TextField("Title", text: $definition.title)
-				TextField("Summary", text: $definition.summary)
+				TextField("Identifier", text: $definition.identifier, prompt: Text(definition.uuid.uuidString))
+				TextField("Title", text: $definition.title, prompt: Text(definition.identifier))
+				TextField("Summary", text: $definition.summary, prompt: Text("What is this research project and what benefits does it bring?"))
 			}
 
 			Section("Research") {
 				TextField("Technology Level", text: $definition.level)
 				TextField("Work", value: $definition.cost, format: .number)
-				LabeledContent("Prerequisites") {
-//					List($definition.prerequisites, id: \.self) { prerequisite in
-//						TextField("Prerequisite", text: prerequisite)
+//				LabeledContent("Prerequisites") {
+//					List {
+//						ForEach($definition.prerequisites, id: \.self) { prerequisite in
+//							TextField("Prerequisite", text: prerequisite)
+//						}
+//						Button {
+//							definition.prerequisites.append("")
+//						} label: {
+//							Label("Add", systemImage: "plus")
+//						}
 //					}
 //					.onDeleteCommand {
 //						definition.prerequisites.removeAll(where: prerequisites.contains)
 //					}
-					HStack {
-						Spacer()
-						Button {
-//							definition.prerequisites.append("")
-						} label: {
-							Label("Add", systemImage: "plus")
-						}
-					}
-				}
+//				}
 				LabeledContent("Position") {
 					HStack {
 						TextField("X", value: $definition.x, format: .number)

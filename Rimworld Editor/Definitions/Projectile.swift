@@ -45,11 +45,11 @@ import SwiftData
 		Label("Projectile", systemImage: "soccerball")
 	}
 
-	@Transient public var label: some View {
+	public var label: some View {
 		Label(title, systemImage: "soccerball")
 	}
 
-	@Transient public var editor: some View {
+	public var editor: some View {
 		ProjectileEditor(self)
 	}
 

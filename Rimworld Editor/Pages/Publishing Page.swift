@@ -90,17 +90,28 @@ struct PublishingEditor: View {
 		try XMLDocument(rootElement: _metadata).xmlData
 			.write(to: aboutURL.appending(component: "About.xml", directoryHint: .notDirectory))
 
-		// Write defs
+		// Prepare to write textures
+
+		let texturesURL = url.appending(component: "Textures", directoryHint: .isDirectory)
+		try FileManager.default.createDirectory(at: texturesURL, withIntermediateDirectories: true)
+
+		// Prepare to write defs
 
 		let defsURL = url.appending(component: "Defs", directoryHint: .isDirectory)
 		try FileManager.default.createDirectory(at: defsURL, withIntermediateDirectories: true)
 
 		let _defs = XMLElement(name: "Defs")
 
+		// Write ResearchProject defs
+
 		let projects = try context.fetch(FetchDescriptor<ResearchProject>())
 		for project in projects {
 			_defs.addChild(project.xml)
+			// TODO: Allow graphic classes to write textures
+			// project.graphics.write(textures: project.textures, at: texturesURL.appending(component: project.computedIdentifier))
 		}
+
+		// Write defs if applicable
 
 		if _defs.childCount > 0 {
 			try XMLDocument(rootElement: _defs).xmlData

@@ -42,7 +42,7 @@ struct TextureField<Label: View>: View {
 		}
 		.sheet(isPresented: $isImportPresented) {
 			List {
-				
+
 			}
 			.navigationTitle("Select a Texture")
 		}
@@ -50,54 +50,40 @@ struct TextureField<Label: View>: View {
 
 }
 
-struct TextureContentsField<Label: View>: View {
+struct TextureContentsField: View {
 	@Bindable private var texture: Texture
 	@State private var isImportPresented = false
 
-	private let label: Label
-
-	init(_ texture: Texture, @ViewBuilder label: () -> Label) {
+	init(_ texture: Texture) {
 		self.texture = texture
-		self.label = label()
-	}
-
-	init(_ texture: Texture) where Label == EmptyView {
-		self.init(texture) { EmptyView() }
-	}
-
-	init(_ title: LocalizedStringKey, texture: Texture) where Label == Text {
-		self.init(texture) { Text(title) }
-	}
-
-	init(_ title: String, texture: Texture) where Label == Text {
-		self.init(texture) { Text(title) }
 	}
 
 	var body: some View {
-		LabeledContent {
-			if let data = texture.contents, let image = Image(data: data) {
-				image
-					.resizable()
-					.interpolation(.none)
-					.aspectRatio(contentMode: .fit)
-					.allowedDynamicRange(.constrainedHigh)
-					.clipShape(RoundedRectangle(cornerRadius: 12))
-					.overlay(alignment: .topTrailing) {
-						Button(role: .destructive) {
-							texture.contents = nil
-						} label: {
-							SwiftUI.Label("Clear", systemImage: "x.circle.fill")
-						}
-						.foregroundStyle(.red)
+		if let data = texture.contents, let image = Image(data: data) {
+			image
+				.resizable()
+				.interpolation(.none)
+				.aspectRatio(contentMode: .fit)
+				.allowedDynamicRange(.constrainedHigh)
+				.clipShape(RoundedRectangle(cornerRadius: 12))
+				.overlay(alignment: .topTrailing) {
+					Button(role: .destructive) {
+						texture.contents = nil
+					} label: {
+						SwiftUI.Label("Clear", systemImage: "x.circle.fill")
 					}
-			} else {
-				Button("Import image") {
-					isImportPresented = true
+					.foregroundStyle(.red)
 				}
-				.buttonStyle(.link)
+		} else {
+			Button("Import image") {
+				isImportPresented = true
 			}
-		} label: {
-			label
+			.buttonStyle(.link)
+			.fileImporter(isPresented: $isImportPresented, allowedContentTypes: [.image]) { result in
+				if case let .success(url) = result, let data = try? Data(contentsOf: url) {
+					texture.contents = data
+				}
+			}
 		}
 	}
 
@@ -105,24 +91,43 @@ struct TextureContentsField<Label: View>: View {
 
 struct TextureSelectionSheet: View {
 	@Query private var textures: [Texture]
-	@Binding private var previouslySelected: [Texture]
+	@Binding private var selected: [Texture]
 	@State private var selection: Set<Texture.ID>
 
 	init(textures: Binding<[Texture]>) {
-		_previouslySelected = textures
+		_selected = textures
 		let selection = Set(textures.wrappedValue.map(\.id))
 		_selection = State(initialValue: selection)
 	}
 
-	var body: some View {
-		List(textures, selection: $selection) { texture in
-			texture.label
+	private var available: [Texture] {
+		textures.filter { texture in
+			!selected.contains { $0.id == texture.id }
 		}
-		.onChange(of: selection) {
-			previouslySelected = textures.filter { texture in
-				selection.contains(texture.id)
+	}
+
+	private var currentlySelected: [Texture] {
+		textures.filter { texture in
+			selection.contains(texture.id)
+		}
+	}
+
+	var body: some View {
+		HStack {
+			List(available, selection: $selection) { texture in
+				texture.label
 			}
-			print("from \(selection)")
+			.onMoveCommand { direction in
+				switch direction {
+				case .right:
+					selected.append(contentsOf: currentlySelected)
+				default:
+					break
+				}
+			}
+			List($selected, editActions: .all) { $texture in
+				texture.label
+			}
 		}
 	}
 

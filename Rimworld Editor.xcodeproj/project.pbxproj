@@ -31,6 +31,8 @@
 		73C3269129ACF0260019D3FE /* RimworldManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C3269029ACF0260019D3FE /* RimworldManifest.swift */; };
 		73CE24FA2A337E050088F13E /* PackageRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CE24F92A337E050088F13E /* PackageRelation.swift */; };
 		73CE24FC2A33A7F10088F13E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CE24FB2A33A7F10088F13E /* Extensions.swift */; };
+		73F5C9602A3B56500000416A /* SoundField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F5C95F2A3B56500000416A /* SoundField.swift */; };
+		73F5C9622A3B573A0000416A /* ModelField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F5C9612A3B573A0000416A /* ModelField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +63,8 @@
 		73C3269029ACF0260019D3FE /* RimworldManifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RimworldManifest.swift; sourceTree = "<group>"; };
 		73CE24F92A337E050088F13E /* PackageRelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageRelation.swift; sourceTree = "<group>"; };
 		73CE24FB2A33A7F10088F13E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		73F5C95F2A3B56500000416A /* SoundField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundField.swift; sourceTree = "<group>"; };
+		73F5C9612A3B573A0000416A /* ModelField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +100,8 @@
 			children = (
 				7388EDD92A38E73F008A07CB /* GraphicsField.swift */,
 				7388EDDA2A38E73F008A07CB /* TextureField.swift */,
+				73F5C95F2A3B56500000416A /* SoundField.swift */,
+				73F5C9612A3B573A0000416A /* ModelField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -259,11 +265,13 @@
 			files = (
 				73AC1C5629A9A63900DEB7DA /* Publishing Page.swift in Sources */,
 				73AC1C5429A9A62600DEB7DA /* Manifest Page.swift in Sources */,
+				73F5C9602A3B56500000416A /* SoundField.swift in Sources */,
 				7388EDDE2A38E73F008A07CB /* TextureField.swift in Sources */,
 				7388EDDD2A38E73F008A07CB /* GraphicsField.swift in Sources */,
 				73AC1C4129A99EB700DEB7DA /* ContentView.swift in Sources */,
 				73852CAB2A32886500202D56 /* PackageDependency.swift in Sources */,
 				7388EDE02A38E752008A07CB /* EditableModel.swift in Sources */,
+				73F5C9622A3B573A0000416A /* ModelField.swift in Sources */,
 				73AC1C4E29A99EE300DEB7DA /* Sidebar.swift in Sources */,
 				7388EDDB2A38E73F008A07CB /* Sound.swift in Sources */,
 				73C3268D29ACEF0A0019D3FE /* RimworldEditor.swift in Sources */,

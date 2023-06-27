@@ -10,10 +10,10 @@ import SwiftData
 
 struct GraphicsView: View {
 	@Binding private var textures: [Texture]
-	@Binding private var mode: GraphicMode
+	@Binding private var mode: GraphicsClass
 
 	init(
-		selection mode: Binding<GraphicMode>,
+		selection mode: Binding<GraphicsClass>,
 		using textures: Binding<[Texture]>
 	) {
 		_textures = textures
@@ -21,17 +21,31 @@ struct GraphicsView: View {
 	}
 
 	var body: some View {
-		Picker("Mode", selection: $mode) {
-			ForEach(GraphicMode.allCases) { $0 }
+		Picker("Class", selection: $mode) {
+			ForEach(GraphicsClass.allCases) {
+				$0.label
+			}
 		}
-		NavigationLink {
-			TextureSelectionSheet(textures: $textures)
-		} label: {
-			Label {
-				Text("Textures")
-			} icon: {
-				ForEach(textures) { texture in
-					texture.icon
+		//TODO: Advanced only?
+		TextField("Custom Class", text: $mode.rawValue, prompt: Text("Graphic_"))
+			.textFieldStyle(.roundedBorder)
+		switch mode {
+		case .none:
+			EmptyView()
+		default:
+			ModelsField(selection: $textures) { texture in
+				texture.label
+			} label: { textures in
+				LabeledContent {
+					HStack {
+						ForEach(textures) { texture in
+							texture.icon
+								.clipShape(RoundedRectangle(cornerRadius: 8))
+						}
+					}
+					.frame(height: 80)
+				} label: {
+					Text("Textures")
 				}
 			}
 		}
