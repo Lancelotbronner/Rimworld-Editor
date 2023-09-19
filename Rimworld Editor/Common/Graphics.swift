@@ -1,67 +1,81 @@
 //
-//  GraphicClass.swift
+//  Graphics.swift
 //  Rimworld Editor
 //
-//  Created by Christophe Bronner on 2023-06-13.
+//  Created by Christophe Bronner on 2023-07-18.
 //
 
+import SwiftData
 import SwiftUI
 
-public struct GraphicsClass: Hashable, Codable, RawRepresentable, Identifiable, CaseIterable {
+@Model public final class Graphics {
 
-	public static let allCases: [GraphicsClass] = [
-		.none,
-		.appearances, .cluster, .fleck, .flash, .pulse, .flicker, .meals, .mote, .ages, .cardinal, .pawn, .random, .single, .stack,
-	]
+	var identifier: String?
 
-	public static let none = GraphicsClass(rawValue: "")
+	var single: GraphicSingle?
+	var multi: GraphicMulti?
+	var random: GraphicRandom?
 
-	public static let appearances = GraphicsClass(rawValue: "Graphic_Appearances")
-	public static let cluster = GraphicsClass(rawValue: "Graphic_Cluster")
-	public static let fleck = GraphicsClass(rawValue: "Graphic_Fleck")
-	public static let flash = GraphicsClass(rawValue: "Graphic_FleckFlash")
-	public static let pulse = GraphicsClass(rawValue: "Graphic_FleckPulse")
-	public static let flicker = GraphicsClass(rawValue: "Graphic_Flicker")
-	public static let meals = GraphicsClass(rawValue: "Graphic_MealVariants")
-	public static let mote = GraphicsClass(rawValue: "Graphic_Mote")
-	public static let ages = GraphicsClass(rawValue: "Graphic_MoteWithAgeSecs")
-	public static let cardinal = GraphicsClass(rawValue: "Graphic_Multi")
-	public static let pawn = GraphicsClass(rawValue: "Graphic_PawnBodySilouhette")
-	public static let random = GraphicsClass(rawValue: "Graphic_Random")
-	public static let single = GraphicsClass(rawValue: "Graphic_Single")
-	public static let stack = GraphicsClass(rawValue: "Graphic_StackCount")
+	var rawMode = ""
 
-	public var rawValue: String
+	init() { }
 
-	public init(rawValue: String) {
-		self.rawValue = rawValue
+	public var mode: GraphicsClass? {
+		get { GraphicsClass(rawValue: rawMode) }
+		set { rawMode = newValue?.rawValue ?? "" }
 	}
 
-	public var id: GraphicsClass {
-		self
-	}
-
-	@ViewBuilder public var label: some View {
-		switch self {
-		case .none: Label("None", systemImage: "rectangle")
-		case .single: Label("Single", systemImage: "photo")
-		case .cardinal: Label("Multi", systemImage: "photo.on.rectangle")
-		case .random: Label("Random", systemImage: "photo.stack")
-		default: Text(rawValue)
+	internal var _mode: (any GraphicClass)? {
+		switch mode {
+		case .cardinal: return multi
+		case .random: return random
+		case .single: return single
+		case .none: return nil
 		}
 	}
 
-	public func write(textures: [Texture], to url: URL) throws {
-		switch self {
-		case .none: return
-		case .single:
-			try textures.first?.contents?.write(to: url.appendingPathExtension("png"))
-		default:
-			try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-			for texture in textures {
-				try texture.contents?.write(to: url.appending(component: texture.uuid.uuidString + ".png", directoryHint: .notDirectory))
+	public func xml(at path: String) -> XMLElement {
+		let root = XMLElement(name: "graphicData")
+		root.addChild(XMLElement(name: "graphicClass", stringValue: rawMode))
+		_mode?.populate(xml: root, at: identifier ?? path)
+		return root
+	}
+
+}
+
+public struct GraphicsEditor: View {
+	@Bindable private var graphics: Graphics
+
+	public init(_ graphics: Graphics) {
+		self.graphics = graphics
+	}
+
+	public var body: some View {
+		TextField("Identifier", text: $graphics.identifier ?? "", prompt: Text("infer from definition"))
+		Picker("Class", selection: $graphics.rawMode) {
+			ForEach(GraphicsClass.allCases, id: \.rawValue) { mode in
+				mode.label
 			}
 		}
-	}
+		.onChange(of: graphics.mode) { previousValue, newValue in
+			//			newValue.migrate(&slots, from: previousValue, using: context)
+			// TODO: Migrate modes
+		}
+		TextField("Custom Class", text: $graphics.rawMode, prompt: Text("Graphic_"))
+			.textFieldStyle(.roundedBorder)
 
+		if let mode = graphics.mode {
+			Section {
+				graphics._mode?._editor
+			} header: {
+				mode.label
+			}
+		} else {
+			Text("This graphic class isn't supported.")
+				.font(.caption)
+				.foregroundStyle(.secondary)
+		}
+
+		// TODO: Common graphics fields
+	}
 }

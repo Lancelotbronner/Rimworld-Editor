@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-
-	@Environment(Navigation<AppRoutes>.self) private var navigation
+	@State private var navigation = Navigation<AppRoutes>()
 
 	var body: some View {
 		NavigationSplitView {
@@ -25,8 +24,12 @@ struct ContentView: View {
 //					}
 //				}
 		} detail: {
-			AppRouter(navigation)
+			NavigationStack(path: $navigation.path) {
+				AppRouter(navigation)
+					.navigationDestination(definition: ResearchProject.self)
+			}
 		}
+		.environment(navigation)
 		.navigationTitle("Rimworld Editor")
 	}
 

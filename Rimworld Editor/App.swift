@@ -12,7 +12,6 @@ import SwiftData
     var body: some Scene {
 		DocumentGroup(editing: RimworldEditor.project, contentType: .rimworldProject) {
 			ContentView()
-				.environment(Navigation<AppRoutes>())
 		}
     }
 }

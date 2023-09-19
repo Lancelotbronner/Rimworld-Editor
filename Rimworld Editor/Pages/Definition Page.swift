@@ -9,24 +9,19 @@ import SwiftUI
 import SwiftData
 
 struct DefinitionPage<Model: EditableModel>: View {
-
 	@Environment(Navigation<AppRoutes>.self) private var navigation
 	@Environment(\.modelContext) private var context
+	@State private var selection: Set<Model> = []
 
 	@Query private var definitions: [Model]
 
 	var body: some View {
 		NavigationStack {
-			List {
+			List(selection: $selection) {
 				ForEach(definitions) { definition in
-					NavigationLink(value: definition) {
-						definition.label
-					}
+					definition.label
+						.tag(definition)
 				}
-			}
-			.navigationDestination(for: Model.self) { definition in
-				definition.editor
-					.formStyle(.grouped)
 			}
 		}
 		.toolbar {

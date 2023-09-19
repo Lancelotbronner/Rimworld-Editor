@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7301FEBB2A60A77E00FE7FBC /* Graphic Single.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301FEBA2A60A77E00FE7FBC /* Graphic Single.swift */; };
+		7301FEBD2A60A84300FE7FBC /* Graphic Multi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301FEBC2A60A84300FE7FBC /* Graphic Multi.swift */; };
 		7309A54B2A30CE780042711E /* ResearchProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7309A54A2A30CE780042711E /* ResearchProject.swift */; };
 		7309A5522A30F19A0042711E /* AppRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7309A5512A30F19A0042711E /* AppRoutes.swift */; };
 		7309A5542A30F2E10042711E /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7309A5532A30F2E10042711E /* AppRouter.swift */; };
 		7309A5592A30F9DA0042711E /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7309A5582A30F9DA0042711E /* Navigation.swift */; };
+		7327B6DB2AB9488300EECB96 /* DefinitionEditor Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7327B6DA2AB9488300EECB96 /* DefinitionEditor Page.swift */; };
 		73852CAB2A32886500202D56 /* PackageDependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73852CAA2A32886500202D56 /* PackageDependency.swift */; };
 		7388EDD42A38E722008A07CB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7388EDD32A38E722008A07CB /* Preview Assets.xcassets */; };
 		7388EDDB2A38E73F008A07CB /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7388EDD62A38E73F008A07CB /* Sound.swift */; };
@@ -18,7 +21,9 @@
 		7388EDDD2A38E73F008A07CB /* GraphicsField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7388EDD92A38E73F008A07CB /* GraphicsField.swift */; };
 		7388EDDE2A38E73F008A07CB /* TextureField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7388EDDA2A38E73F008A07CB /* TextureField.swift */; };
 		7388EDE02A38E752008A07CB /* EditableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7388EDDF2A38E752008A07CB /* EditableModel.swift */; };
-		7388EDE32A38E75B008A07CB /* Graphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7388EDE22A38E75B008A07CB /* Graphics.swift */; };
+		7388EDE32A38E75B008A07CB /* GraphicClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7388EDE22A38E75B008A07CB /* GraphicClass.swift */; };
+		739A481C2A67007C00AB4901 /* Graphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739A481B2A67007C00AB4901 /* Graphics.swift */; };
+		739A481E2A6702BD00AB4901 /* Graphic Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739A481D2A6702BD00AB4901 /* Graphic Random.swift */; };
 		73AC1C3F29A99EB700DEB7DA /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73AC1C3E29A99EB700DEB7DA /* App.swift */; };
 		73AC1C4129A99EB700DEB7DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73AC1C4029A99EB700DEB7DA /* ContentView.swift */; };
 		73AC1C4329A99EB700DEB7DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 73AC1C4229A99EB700DEB7DA /* Assets.xcassets */; };
@@ -36,11 +41,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7301FEBA2A60A77E00FE7FBC /* Graphic Single.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Graphic Single.swift"; sourceTree = "<group>"; };
+		7301FEBC2A60A84300FE7FBC /* Graphic Multi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Graphic Multi.swift"; sourceTree = "<group>"; };
 		7309A54A2A30CE780042711E /* ResearchProject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchProject.swift; sourceTree = "<group>"; };
 		7309A5512A30F19A0042711E /* AppRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoutes.swift; sourceTree = "<group>"; };
 		7309A5532A30F2E10042711E /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		7309A5552A30F34B0042711E /* Rimworld-Editor-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Rimworld-Editor-Info.plist"; sourceTree = SOURCE_ROOT; };
 		7309A5582A30F9DA0042711E /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
+		7327B6DA2AB9488300EECB96 /* DefinitionEditor Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DefinitionEditor Page.swift"; sourceTree = "<group>"; };
 		73852CAA2A32886500202D56 /* PackageDependency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageDependency.swift; sourceTree = "<group>"; };
 		7388EDD32A38E722008A07CB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7388EDD62A38E73F008A07CB /* Sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
@@ -48,7 +56,9 @@
 		7388EDD92A38E73F008A07CB /* GraphicsField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicsField.swift; sourceTree = "<group>"; };
 		7388EDDA2A38E73F008A07CB /* TextureField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureField.swift; sourceTree = "<group>"; };
 		7388EDDF2A38E752008A07CB /* EditableModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableModel.swift; sourceTree = "<group>"; };
-		7388EDE22A38E75B008A07CB /* Graphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graphics.swift; sourceTree = "<group>"; };
+		7388EDE22A38E75B008A07CB /* GraphicClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphicClass.swift; sourceTree = "<group>"; };
+		739A481B2A67007C00AB4901 /* Graphics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graphics.swift; sourceTree = "<group>"; };
+		739A481D2A6702BD00AB4901 /* Graphic Random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Graphic Random.swift"; sourceTree = "<group>"; };
 		73AC1C3B29A99EB700DEB7DA /* Rimworld Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rimworld Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73AC1C3E29A99EB700DEB7DA /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		73AC1C4029A99EB700DEB7DA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -109,7 +119,11 @@
 		7388EDE12A38E75B008A07CB /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				7388EDE22A38E75B008A07CB /* Graphics.swift */,
+				7301FEBC2A60A84300FE7FBC /* Graphic Multi.swift */,
+				739A481D2A6702BD00AB4901 /* Graphic Random.swift */,
+				7301FEBA2A60A77E00FE7FBC /* Graphic Single.swift */,
+				7388EDE22A38E75B008A07CB /* GraphicClass.swift */,
+				739A481B2A67007C00AB4901 /* Graphics.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -166,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				73C3268829ACEEE10019D3FE /* Definition Page.swift */,
+				7327B6DA2AB9488300EECB96 /* DefinitionEditor Page.swift */,
 				73AC1C5329A9A62600DEB7DA /* Manifest Page.swift */,
 				73AC1C5529A9A63900DEB7DA /* Publishing Page.swift */,
 			);
@@ -273,11 +288,15 @@
 				7388EDE02A38E752008A07CB /* EditableModel.swift in Sources */,
 				73F5C9622A3B573A0000416A /* ModelField.swift in Sources */,
 				73AC1C4E29A99EE300DEB7DA /* Sidebar.swift in Sources */,
+				739A481E2A6702BD00AB4901 /* Graphic Random.swift in Sources */,
+				739A481C2A67007C00AB4901 /* Graphics.swift in Sources */,
 				7388EDDB2A38E73F008A07CB /* Sound.swift in Sources */,
+				7301FEBB2A60A77E00FE7FBC /* Graphic Single.swift in Sources */,
 				73C3268D29ACEF0A0019D3FE /* RimworldEditor.swift in Sources */,
 				7388EDDC2A38E73F008A07CB /* Texture.swift in Sources */,
 				73C3268929ACEEE10019D3FE /* Definition Page.swift in Sources */,
-				7388EDE32A38E75B008A07CB /* Graphics.swift in Sources */,
+				7388EDE32A38E75B008A07CB /* GraphicClass.swift in Sources */,
+				7301FEBD2A60A84300FE7FBC /* Graphic Multi.swift in Sources */,
 				7309A54B2A30CE780042711E /* ResearchProject.swift in Sources */,
 				73C3269129ACF0260019D3FE /* RimworldManifest.swift in Sources */,
 				73CE24FA2A337E050088F13E /* PackageRelation.swift in Sources */,
@@ -285,6 +304,7 @@
 				7309A5522A30F19A0042711E /* AppRoutes.swift in Sources */,
 				7309A5592A30F9DA0042711E /* Navigation.swift in Sources */,
 				73CE24FC2A33A7F10088F13E /* Extensions.swift in Sources */,
+				7327B6DB2AB9488300EECB96 /* DefinitionEditor Page.swift in Sources */,
 				73AC1C5929A9ABC900DEB7DA /* Projectile.swift in Sources */,
 				73AC1C3F29A99EB700DEB7DA /* App.swift in Sources */,
 			);

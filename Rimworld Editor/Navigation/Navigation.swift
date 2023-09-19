@@ -19,8 +19,4 @@ public protocol Routes: Codable, Hashable, Identifiable where ID == Self {
 
 	public init() { }
 
-	public var bindable: Bindable<Navigation<Route>> {
-		Bindable(self)
-	}
-
 }

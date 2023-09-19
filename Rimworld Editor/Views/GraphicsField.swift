@@ -9,45 +9,31 @@ import SwiftUI
 import SwiftData
 
 struct GraphicsView: View {
-	@Binding private var textures: [Texture]
-	@Binding private var mode: GraphicsClass
+	@Environment(\.modelContext) private var context
+	@Bindable private var graphics: Graphics
 
-	init(
-		selection mode: Binding<GraphicsClass>,
-		using textures: Binding<[Texture]>
-	) {
-		_textures = textures
-		_mode = mode
+	init(_ graphics: Graphics) {
+		self.graphics = graphics
 	}
 
 	var body: some View {
-		Picker("Class", selection: $mode) {
-			ForEach(GraphicsClass.allCases) {
-				$0.label
+		Picker("Class", selection: $graphics.rawMode) {
+			ForEach(GraphicsClass.allCases, id: \.rawValue) { mode in
+				mode.label
 			}
 		}
-		//TODO: Advanced only?
-		TextField("Custom Class", text: $mode.rawValue, prompt: Text("Graphic_"))
+		.onChange(of: graphics.mode) { previousValue, newValue in
+//			newValue.migrate(&slots, from: previousValue, using: context)
+		// TODO: Migrate modes
+		}
+		TextField("Custom Class", text: $graphics.rawMode, prompt: Text("Graphic_"))
 			.textFieldStyle(.roundedBorder)
-		switch mode {
-		case .none:
-			EmptyView()
-		default:
-			ModelsField(selection: $textures) { texture in
-				texture.label
-			} label: { textures in
-				LabeledContent {
-					HStack {
-						ForEach(textures) { texture in
-							texture.icon
-								.clipShape(RoundedRectangle(cornerRadius: 8))
-						}
-					}
-					.frame(height: 80)
-				} label: {
-					Text("Textures")
-				}
-			}
+		if let mode = graphics._mode {
+			mode._editor
+		} else {
+			Text("This graphic mode isn't supported.")
+				.font(.caption)
+				.foregroundStyle(.secondary)
 		}
 	}
 

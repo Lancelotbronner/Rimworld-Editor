@@ -15,7 +15,7 @@ struct Sidebar: View {
 	}
 
 	var body: some View {
-		List(selection: navigation.bindable.route) {
+		List(selection: $navigation.route) {
 			Section("Project") {
 				AppRoutes.manifest.link
 				AppRoutes.publishing.link

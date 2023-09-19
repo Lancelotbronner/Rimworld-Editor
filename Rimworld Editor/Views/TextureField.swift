@@ -8,43 +8,117 @@
 import SwiftUI
 import SwiftData
 
-struct TextureField<Label: View>: View {
-	@Binding private var texture: Texture?
-	@State private var isImportPresented = false
+public struct TextureLabel: View {
+	private let texture: Texture?
 
+	public init(_ texture: Texture?) {
+		self.texture = texture
+	}
+
+	public var body: some View {
+		Group {
+			if let icon = texture?.contents.flatMap(Image.init) {
+				icon
+					.resizable()
+					.interpolation(.none)
+			} else {
+				Image(systemName: "photo")
+					.resizable()
+					.redacted(reason: .placeholder)
+			}
+		}
+		.aspectRatio(contentMode: .fit)
+		.clipShape(RoundedRectangle(cornerRadius: 4, style: .circular))
+	}
+
+}
+
+public struct TexturesLabel: View {
+	private let textures: [Texture]
+
+	public init(_ textures: [Texture]) {
+		self.textures = textures
+	}
+
+	public var body: some View {
+		if textures.isEmpty {
+			TextureLabel(nil)
+		} else {
+			HStack {
+				ForEach(textures, content: TextureLabel.init)
+			}
+		}
+	}
+}
+
+public struct TextureField<Label: View>: View {
+
+	@Binding private var selection: Texture?
 	private let label: Label
 
-	init(_ texture: Binding<Texture?>, @ViewBuilder label: () -> Label) {
-		_texture = texture
+	public init(selection: Binding<Texture?>, @ViewBuilder label: () -> Label) {
+		_selection = selection
 		self.label = label()
 	}
 
-	init(_ texture: Binding<Texture?>) where Label == EmptyView {
-		self.init(texture) { EmptyView() }
+	public init(_ title: LocalizedStringKey, selection: Binding<Texture?>) where Label == Text {
+		self.init(selection: selection) { Text(title) }
 	}
 
-	init(_ title: LocalizedStringKey, texture: Binding<Texture?>) where Label == Text {
-		self.init(texture) { Text(title) }
+	public init(_ title: String, selection: Binding<Texture?>) where Label == Text {
+		self.init(selection: selection) { Text(title) }
 	}
 
-	init(_ title: String, texture: Binding<Texture?>) where Label == Text {
-		self.init(texture) { Text(title) }
+	public init(selection: Binding<Texture>, @ViewBuilder label: () -> Label) {
+		_selection = Binding { selection.wrappedValue } set: { selection.wrappedValue = $0 ?? selection.wrappedValue }
+		self.label = label()
 	}
 
-	var body: some View {
-		LabeledContent {
-			Button("Select Texture...") {
-				isImportPresented = true
+	public init(_ title: LocalizedStringKey, selection: Binding<Texture>) where Label == Text {
+		self.init(selection: selection) { Text(title) }
+	}
+
+	public init(_ title: String, selection: Binding<Texture>) where Label == Text {
+		self.init(selection: selection) { Text(title) }
+	}
+
+	public var body: some View {
+		ModelField(selection: $selection, content: TextureLabel.init) {
+			LabeledContent {
+				TextureLabel(selection)
+			} label: {
+				label
 			}
-			.buttonStyle(.link)
-		} label: {
-			label
 		}
-		.sheet(isPresented: $isImportPresented) {
-			List {
+	}
 
+}
+
+public struct TexturesField<Label: View>: View {
+
+	@Binding private var selection: [Texture]
+	private let label: Label
+
+	public init(selection: Binding<[Texture]>, @ViewBuilder label: () -> Label) {
+		_selection = selection
+		self.label = label()
+	}
+
+	public init(_ title: LocalizedStringKey, selection: Binding<[Texture]>) where Label == Text {
+		self.init(selection: selection) { Text(title) }
+	}
+
+	public init(_ title: String, selection: Binding<[Texture]>) where Label == Text {
+		self.init(selection: selection) { Text(title) }
+	}
+
+	public var body: some View {
+		ModelsField(selection: $selection, content: TextureLabel.init) {
+			LabeledContent {
+				TexturesLabel(selection)
+			} label: {
+				label
 			}
-			.navigationTitle("Select a Texture")
 		}
 	}
 

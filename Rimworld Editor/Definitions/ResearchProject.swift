@@ -22,16 +22,8 @@ import SwiftData
 	/// The description of the research project
 	public var summary = ""
 
-	private var rawGraphics = ""
-
-	/// The icon's graphic mode
-	public var graphics: GraphicsClass {
-		get { GraphicsClass(rawValue: rawGraphics) }
-		set { rawGraphics = newValue.rawValue }
-	}
-
-	/// The textures associated with the project
-	public var textures: [Texture] = []
+	/// The icon of the research project
+	public var graphics: Graphics
 
 	/// How much work must go into this project in order to complete it
 	public var cost = 0
@@ -40,7 +32,7 @@ import SwiftData
 	public var level = ""
 
 	/// The identifiers of the research project's prerequisites
-//	public var prerequisites: [String] = []
+	public var prerequisites: [ResearchProject] = []
 
 	/// The X position of the project in the research view
 	public var x = 0.0
@@ -51,15 +43,15 @@ import SwiftData
 	public init(_ title: String) {
 		self.identifier = "research_project:\(title)"
 		self.title = title
+		self.graphics = Graphics()
 	}
 
 	public var computedIdentifier: String {
-		_read {
+		get {
 			if identifier.isEmpty {
-				yield uuid.uuidString
-				return
+				return uuid.uuidString
 			}
-			yield identifier
+			return identifier
 		}
 	}
 
@@ -84,10 +76,7 @@ import SwiftData
 		root.addChild(XMLElement(name: "techLevel", stringValue: level))
 		root.addChild(XMLElement(name: "researchViewX", stringValue: x.description))
 		root.addChild(XMLElement(name: "researchViewY", stringValue: y.description))
-
-		let _graphics = XMLElement(name: "graphicData")
-		//TODO: texPath???
-		_graphics.addChild(XMLElement(name: "graphicClass", stringValue: graphics.rawValue))
+		root.addChild(graphics.xml(at: identifier))
 
 		return root
 	}
@@ -138,7 +127,7 @@ public struct ResearchProjectEditor: View {
 			}
 
 			Section("Graphics") {
-				GraphicsView(selection: $definition.graphics, using: $definition.textures)
+				GraphicsEditor(definition.graphics)
 			}
 		}
 		.formStyle(.grouped)

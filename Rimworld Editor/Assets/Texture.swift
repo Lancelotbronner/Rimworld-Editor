@@ -10,44 +10,23 @@ import SwiftData
 
 @Model public final class Texture: EditableModel {
 
-	/// The unique identifier of the texture
-	public var uuid = UUID()
-
 	public var title: String
-
-	public var identifier = ""
 
 	@Attribute(.externalStorage) public var contents: Data?
 
-	public init(_ title: String, as identifier: String = "") {
+	public init(_ title: String) {
 		self.title = title
-		self.identifier = identifier
-	}
-
-	public convenience init(_ title: String) {
-		self.init(title, as: title)
 	}
 
 	public static var label: some View {
 		Label("Texture", systemImage: "photo")
 	}
 
-	@ViewBuilder public var icon: some View {
-		if let icon = contents.flatMap(Image.init) {
-			icon
-				.resizable()
-				.interpolation(.none)
-				.aspectRatio(contentMode: .fit)
-		} else {
-			Image(systemName: "photo")
-		}
-	}
-
 	public var label: some View {
 		Label {
 			Text(title)
 		} icon: {
-			icon
+			TextureLabel(self)
 		}
 
 	}
@@ -64,7 +43,6 @@ struct TextureEditor: View {
 	var body: some View {
 		Form {
 			TextField("Title", text: $texture.title)
-			TextField("Identifier", text: $texture.identifier, prompt: Text(texture.uuid.uuidString))
 			TextureContentsField(texture)
 		}
 		.formStyle(.grouped)

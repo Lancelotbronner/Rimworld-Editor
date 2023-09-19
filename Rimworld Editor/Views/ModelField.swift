@@ -8,33 +8,38 @@
 import SwiftUI
 import SwiftData
 
-struct ModelField<Model: PersistentModel, Content: View>: View {
+struct ModelField<Model: PersistentModel, Content: View, Label: View>: View {
+
 	@Binding private var selection: Model?
-	@State private var isImportPresented = false
-
+	@State private var isSheetPresented = false
 	private let content: (Model) -> Content
+	private let label: Label
 
-	init(selection: Binding<Model?>, @ViewBuilder content: @escaping (Model) -> Content) {
+	init(
+		selection: Binding<Model?>,
+		@ViewBuilder content: @escaping (Model) -> Content,
+		@ViewBuilder label: @escaping () -> Label
+	) {
 		_selection = selection
 		self.content = content
+		self.label = label()
 	}
 
-	init(selection: Binding<Model>, @ViewBuilder content: @escaping (Model) -> Content) {
-		_selection = Binding { selection.wrappedValue } set: { selection.wrappedValue = $0 ?? selection.wrappedValue }
-		self.content = content
+	init(
+		selection: Binding<Model>,
+		@ViewBuilder content: @escaping (Model) -> Content,
+		@ViewBuilder label: @escaping () -> Label
+	) {
+		self.init(selection: Binding<Model?> { selection.wrappedValue } set: { selection.wrappedValue = $0 ?? selection.wrappedValue }, content: content, label: label)
 	}
 
 	var body: some View {
 		Button {
-			isImportPresented = true
+			isSheetPresented = true
 		} label: {
-			if let selection {
-				content(selection)
-			} else {
-				Text("Select...")
-			}
+			label
 		}
-		.sheet(isPresented: $isImportPresented) {
+		.sheet(isPresented: $isSheetPresented) {
 			ModelSheet(selection: $selection, content: content)
 		}
 	}
@@ -49,7 +54,10 @@ struct ModelSheet<Model: PersistentModel, Content: View>: View {
 
 	private let content: (Model) -> Content
 
-	init(selection: Binding<Model?>, @ViewBuilder content: @escaping (Model) -> Content) {
+	init(
+		selection: Binding<Model?>,
+		@ViewBuilder content: @escaping (Model) -> Content
+	) {
 		_result = selection
 		self.content = content
 	}
@@ -75,27 +83,27 @@ struct ModelSheet<Model: PersistentModel, Content: View>: View {
 	}
 }
 
-struct ModelsField<Model: PersistentModel, Contents: View, Content: View>: View {
+struct ModelsField<Model: PersistentModel, Content: View, Label: View>: View {
 	@Binding private var selection: [Model]
 
-	private let contents: ([Model]) -> Contents
 	private let content: (Model) -> Content
+	private let label: Label
 
 	init(
 		selection: Binding<[Model]>,
 		@ViewBuilder content: @escaping (Model) -> Content,
-		@ViewBuilder label: @escaping ([Model]) -> Contents
+		@ViewBuilder label: @escaping () -> Label
 	) {
 		_selection = selection
-		self.contents = label
 		self.content = content
+		self.label = label()
 	}
 
 	var body: some View {
 		NavigationLink {
 			ModelsSheet(selection: $selection, content: content)
 		} label: {
-			contents(selection)
+			label
 		}
 	}
 }
@@ -104,8 +112,7 @@ struct ModelsSheet<Model: PersistentModel, Content: View>: View {
 	@Environment(\.dismiss) private var dismiss
 	@Query private var models: [Model]
 	@Binding private var value: [Model]
-	@State private var modelSelection: Set<Model.ID> = []
-	@State private var valueSelection: Set<Model.ID> = []
+	@State private var selection: Set<Model> = []
 
 	private let content: (Model) -> Content
 
@@ -114,42 +121,72 @@ struct ModelsSheet<Model: PersistentModel, Content: View>: View {
 		self.content = content
 	}
 
-	private var available: [Model] {
-		models.filter { model in
-			!value.contains { $0 == model }
+	private func contains(_ model: Model) -> Bool {
+		value.contains { $0.id == model.id }
+	}
+
+	private func firstIndex(of model: Model) -> Int? {
+		value.firstIndex { $0.id == model.id }
+	}
+
+	private func set(_ model: Model, to selection: Bool) {
+		if selection {
+			value.append(model)
+		} else if let i = value.firstIndex(where: { $0.id == model.id }) {
+			value.remove(at: i)
 		}
 	}
 
-	private func append(selection: Set<Model.ID>) {
-		guard !selection.isEmpty else { return }
-		value.append(contentsOf: models.filter { model in
-			selection.contains(model.id)
-		})
-	}
-
-	private func appendSelected() {
-		guard !modelSelection.isEmpty else { return }
-		append(selection: modelSelection)
-		modelSelection.removeAll(keepingCapacity: true)
+	private func toggle(_ model: Model) {
+		if let i = firstIndex(of: model) {
+			value.remove(at: i)
+		} else {
+			value.append(model)
+		}
 	}
 
 	var body: some View {
 		HStack(spacing: 0) {
-			List(available, selection: $modelSelection) { model in
-				content(model)
+			List(models, selection: $selection) { model in
+				Toggle(isOn: Binding {
+					contains(model)
+				} set: {
+					set(model, to: $0)
+				}) {
+					content(model)
+				}
+				.keyboardShortcut(.space)
+				.tag(model)
 			}
-			.contextMenu(forSelectionType: Model.ID.self) { ids in
-				if !ids.isEmpty {
-					Button("Add") {
-						append(selection: ids)
+			.contextMenu(forSelectionType: Model.self) { models in
+				if !models.isEmpty {
+					Button("Select") {
+						let selected = Set(value.lazy.map(\.id))
+						for model in models where !selected.contains(model.id) {
+							set(model, to: true)
+						}
+					}
+					Button("Deselect") {
+						for model in models {
+							if let i = firstIndex(of: model) {
+								value.remove(at: i)
+							}
+						}
+					}
+					Button("Toggle selection") {
+						for model in models {
+							toggle(model)
+						}
 					}
 				}
-			} primaryAction: { ids in
-				append(selection: ids)
+			} primaryAction: { models in
+				for model in models {
+					toggle(model)
+				}
 			}
 			.padding()
 
-			List($value, selection: $valueSelection) { $model in
+			List($value, editActions: .all) { $model in
 				content(model)
 			}
 			.padding()
